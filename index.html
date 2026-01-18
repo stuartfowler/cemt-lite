@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/cemt-lite/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CEMT LikeC4 Test</title>
+  <script type="module" crossorigin src="/cemt-lite/assets/index-TubBldip.js"></script>
+  <link rel="stylesheet" crossorigin href="/cemt-lite/assets/index-CU7GXgi1.css">
+</head>
+
+<body>
+  <div id="root"></div>
+  <script>
+    class EventEmitter {
+      constructor() { this._events = {}; }
+      on(name, cb) { (this._events[name] || (this._events[name] = [])).push(cb); return this; }
+      off(name, cb) { this._events[name] = (this._events[name] || []).filter(c => c !== cb); return this; }
+      emit(name, ...args) { (this._events[name] || []).forEach(cb => cb(...args)); return true; }
+      once(name, cb) { const f = (...args) => { this.off(name, f); cb(...args); }; return this.on(name, f); }
+      addListener(n, c) { return this.on(n, c); }
+      removeListener(n, c) { return this.off(n, c); }
+      removeAllListeners() { this._events = {}; return this; }
+      setMaxListeners() { return this; }
+      getMaxListeners() { return 10; }
+    }
+    window.process = {
+      env: { NODE_ENV: 'development' },
+      versions: { node: '18.0.0' },
+      platform: 'browser',
+      nextTick: (cb) => setTimeout(cb, 0),
+      cwd: () => '/'
+    }
+    window.global = window;
+    window.EventEmitter = EventEmitter;
+    // Define a dummy 'events' object for some bundlers
+    window.events = { EventEmitter };
+  </script>
+</body>
+
+</html>
